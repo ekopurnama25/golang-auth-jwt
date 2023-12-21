@@ -9,7 +9,7 @@ type Users struct {
 	Email          string `gorm:"type:varchar(80);unique" form:"email" binding:"required"`
 	Password       []byte `gorm:"not null" json:"-"`
 	IdRole    		uint  `gorm:"not null" json:"id_role"`
-	Role Role `gorm:"foreignKey:RoleId"`
+	Role Role `gorm:"foreignKey:IdRole"`
 }
 
 type Role struct {
@@ -22,7 +22,7 @@ type AuthUserTokens struct {
 	AccessToken string `gorm:"unique" binding:"required"`
 	RefeshToken string `gorm:"unique" binding:"required"`
 	UserId uint  `gorm:"not null" json:"user_id"`
-	Users Users `gorm:"foreignKey:TokenUserId"`
+	Users Users `gorm:"foreignKey:UserId"`
 }
 
 func (user *Users) SetPassword(password string) error {
