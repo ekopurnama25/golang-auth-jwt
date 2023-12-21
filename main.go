@@ -2,7 +2,7 @@ package main
 
 import (
 	"golang-auth-apiweb-coffee/database"
-
+	"golang-auth-apiweb-coffee/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -18,7 +18,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	//routes.Setup(app)
+	routes.Setup(app)
 
-	app.Listen(":8000")
+	app.Listen(":5000")
 }
