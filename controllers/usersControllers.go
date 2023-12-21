@@ -17,6 +17,8 @@ func SaveUsers(c *fiber.Ctx) error {
 	if err := c.BodyParser(&user); err != nil {
 		return err
 	}
+	const DefaultPasswordForNewUsers = "1234"
+	user.SetPassword(DefaultPasswordForNewUsers)
 	result := database.DB.Create(&user)
 	if result.Error != nil {
 		return result.Error
