@@ -1,6 +1,7 @@
 package models
 
 import (
+	"gorm.io/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 type Users struct {
@@ -36,4 +37,10 @@ func (user *Users) SetPassword(password string) error {
 
 func (user *Users) VerifyPassword(password string) error {
 	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
+}
+
+func (user *Users) Take(db *gorm.DB, limit int, offset int) interface{} {
+	var users []Users
+	db.Preload("Role").Offset(offset).Limit(limit).Find(&users)
+	return users
 }
