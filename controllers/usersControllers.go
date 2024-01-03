@@ -17,12 +17,22 @@ func AllUsers(c *fiber.Ctx) error {
 }
 
 func SaveUsers(c *fiber.Ctx) error {
-	var users models.Users
-	if err := c.BodyParser(&users); err != nil {
+	CreateDto := struct {
+		Username    string `json:"username"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		IdRole  uint `json:"roleId"`	
+	}{}
+	if err := c.BodyParser(&CreateDto); err != nil {
 		return err
 	}
-	const DefaultPasswordForNewUsers = "1234"
-	users.SetPassword(DefaultPasswordForNewUsers)
+	users := models.Users{
+		Username: CreateDto.Username,
+		Email:     CreateDto.Email,
+		IdRole:    CreateDto.IdRole,
+	}
+	
+	users.SetPassword(string(CreateDto.Password))
 	result := database.DB.Create(&users)
 	if result.Error != nil {
 		return c.JSON(fiber.Map{

@@ -3,9 +3,21 @@ package main
 import (
 	"golang-auth-apiweb-coffee/database"
 	"golang-auth-apiweb-coffee/routes"
+	"log"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
+
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+	  log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
+}
 
 func main() {
 
@@ -19,6 +31,6 @@ func main() {
 	}))
 
 	routes.Setup(app)
-
-	app.Listen(":5000")
+	PORT:=goDotEnvVariable("APP_PORT")
+	app.Listen(PORT)
 }

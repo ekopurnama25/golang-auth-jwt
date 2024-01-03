@@ -1,7 +1,6 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 type Users struct {
@@ -26,21 +25,15 @@ type AuthUserTokens struct {
 	Users Users `gorm:"foreignKey:UserId"`
 }
 
-func (user *Users) SetPassword(password string) error {
+func (users *Users) SetPassword(password string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
 		return err
 	}
-	user.Password = hashedPassword
+	users.Password = hashedPassword
 	return nil
 }
 
-func (user *Users) VerifyPassword(password string) error {
-	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
-}
-
-func (user *Users) Take(db *gorm.DB, limit int, offset int) interface{} {
-	var users []Users
-	db.Preload("Role").Offset(offset).Limit(limit).Find(&users)
-	return users
+func (users *Users) VerifyPassword(password string) error {
+	return bcrypt.CompareHashAndPassword(users.Password, []byte(password))
 }
