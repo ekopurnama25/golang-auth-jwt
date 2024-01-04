@@ -36,3 +36,18 @@ func CreateRefreshToken(issuer string, expirationTime time.Time) (string, error)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(env))
 }
+
+func ParseToken(tokenString string) (string, error) {
+	env:= goDotEnvVariable("TOKEN_SCRET")
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(env), nil
+	})
+
+	if err != nil || !token.Valid {
+		return "", err
+	}
+
+	claims := token.Claims.(*jwt.StandardClaims) // Casting the token.Claims to the struct jwt.StandardClaims
+
+	return claims.Issuer, nil
+}

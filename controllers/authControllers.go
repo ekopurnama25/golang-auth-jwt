@@ -76,3 +76,17 @@ func AUthUsersMiddlaware(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message":"Usename not found !"})
 	}
 }
+
+func GetUsersLogin(c *fiber.Ctx) error {
+	cookie := c.Cookies(util.CookieName)
+	userId, err := util.ParseToken(cookie)
+	if err != nil {
+		return err
+	}
+	var users models.Users
+	err = database.DB.Preload("Role").First(&users, userId).Error
+	if err != nil {
+		return fiber.NewError(fiber.StatusNotFound)
+	}
+	return c.JSON(users)
+}
