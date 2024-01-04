@@ -46,16 +46,12 @@ func Authenticated(c *fiber.Ctx) error {
 			return err
 		}
 		Isclaims:= Token.Claims.(*jwt.StandardClaims)
-		var user models.Users 
-		result := database.DB.Where("user_id = ?",Isclaims.Issuer).First(&user)
+		var users models.Users 
+		result := database.DB.Where("user_id = ?",Isclaims).First(&users)
 		if result.RowsAffected > 0 {
-			return c.JSON(fiber.Map{
-			"message": "true",
-		})
+			return c.JSON(true)
 		}else{
-			return c.JSON(fiber.Map{
-			"message": "false",
-		})
+			return c.JSON(false)
 		}
 	}
 	return c.JSON(fiber.Map{
