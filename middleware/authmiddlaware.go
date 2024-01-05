@@ -25,36 +25,42 @@ func goDotEnvVariable(key string) string {
 }
 
 func Authenticated(c *fiber.Ctx) error {
-	headerKey := c.Get(DefaultHeaderAuththentication)
-	token := c.Cookies(util.CookieName)
-	if headerKey == "" {
+	authHeader := c.Get("Authorization")
+	cookie := c.Cookies(util.CookieName)
+	if authHeader == "" {
 		return c.JSON(fiber.Map{
-			"message": "headerKey not Null",
+			"message": "Authorization token is required",
 		})
 	}
-	if token == "" { 
+	if cookie == "" { 
 		return c.JSON(fiber.Map{
 			"message": "token not Null",
 		})
 	}
-	if headerKey != "" && headerKey == token {
+	
+
+	if authHeader != "" && authHeader == cookie {
 		var ENV = goDotEnvVariable("TOKEN_SCRET")
-		Token, err := jwt.ParseWithClaims(token, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+		Token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
 			return []byte(ENV), nil
 		})
+
 		if err != nil {
 			return err
 		}
+		
 		Isclaims:= Token.Claims.(*jwt.StandardClaims)
-		var users models.Users 
-		result := database.DB.Where("user_id = ?",Isclaims).First(&users)
+		var user models.Users 
+		result := database.DB.Where("id = ?",Isclaims.Issuer).First(&user)
 		if result.RowsAffected > 0 {
-			return c.JSON(true)
+				return c.Next()
 		}else{
-			return c.JSON(false)
+				return c.JSON(fiber.Map{
+				"message": "false",
+			})
 		}
 	}
 	return c.JSON(fiber.Map{
-			"message": "false",
-		})
+		"message": "false",
+	})
 }

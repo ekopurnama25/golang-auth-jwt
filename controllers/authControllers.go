@@ -69,6 +69,7 @@ func AUthUsersMiddlaware(c *fiber.Ctx) error {
 			return c.JSON(fiber.Map{
 				"AccessToken":Token,
 				"RefreshToken":Refresh,
+				"users": users.Id,
 			})
 		}
 	}else{

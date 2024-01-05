@@ -2,12 +2,14 @@ package routes
 
 import (
 	"golang-auth-apiweb-coffee/controllers"
-	"golang-auth-apiweb-coffee/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func AuthUsersRoutes(app *fiber.App) {
+func SetupPublicAuthRoutes(app *fiber.App) {
 	app.Post("/api/auth", controllers.AUthUsersMiddlaware)
-	app.Get("/api/home/", middleware.Authenticated, controllers.GetUsersLogin)
+}
+
+func SetupAuthRoutes(app *fiber.App) {
+	app.Get("/api/home/", controllers.GetUsersLogin)
 }

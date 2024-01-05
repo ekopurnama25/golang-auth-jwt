@@ -16,15 +16,15 @@ func goDotEnvVariable(key string) string {
 	}
 	return os.Getenv(key)
 }
-
+const signingKey = "SomeSecretKey" // TODO: move it to a safe place
 func CreateToken(issuer string, expirationTime time.Time) (string, error) {
-	env:= goDotEnvVariable("TOKEN_SCRET")
+	//env:= goDotEnvVariable("TOKEN_SCRET")
 	claims := &jwt.StandardClaims{
 		ExpiresAt: expirationTime.Unix(),
 		Issuer:    issuer,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(env))
+	return token.SignedString([]byte(signingKey))
 }
 
 func CreateRefreshToken(issuer string, expirationTime time.Time) (string, error) {
