@@ -7,6 +7,7 @@ import (
 )
 
 func SetupPublicAuthRoutes(app *fiber.App) {
+	app.Post("/api/refreshToken/", controllers.PostRefreshToken)
 	app.Post("/api/auth", controllers.AUthUsersMiddlaware)
 }
 

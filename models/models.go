@@ -19,8 +19,8 @@ type Role struct {
 
 type AuthUserTokens struct {
 	Id 	uint   `gorm:"primaryKey" json:"id"`
-	AccessToken string `gorm:"unique" binding:"required"`
-	RefeshToken string `gorm:"unique" binding:"required"`
+	AccessToken string `gorm:"type:varchar(350);" form:"access_token" binding:"required"`
+	RefeshToken string `gorm:"type:varchar(350);" form:"refesh_token" binding:"required"`
 	UserId uint  `gorm:"not null" json:"usersId"`
 	Users Users `gorm:"foreignKey:UserId"`
 }
