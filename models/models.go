@@ -25,6 +25,14 @@ type AuthUserTokens struct {
 	Users Users `gorm:"foreignKey:UserId"`
 }
 
+type Coffe struct {
+	Id uint `gorm:"primaryKey" json:"id"`
+	JenisCoffe string `gorm:"type:varchar(350);" form:"jenis_coffe" binding:"required"`
+	HargaCoffe string `gorm:"type:varchar(350);" form:"harga_coffe" binding:"required"`
+	ImagesCoffe string `gorm:"type:varchar(350);" form:"images_coffe" binding:"required"`
+	UrlImageCoffe string `gorm:"type:varchar(350);" form:"url_image_coffe" binding:"required"`
+}
+
 func (users *Users) SetPassword(password string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {

@@ -15,6 +15,6 @@ func Connect() {
 	if err != nil {
 		panic("failed to connect to the database")
 	}
-	db.AutoMigrate(&models.AuthUserTokens{}, &models.Role{}, &models.Users{})
+	db.AutoMigrate(&models.AuthUserTokens{}, &models.Role{}, &models.Users{}, &models.Coffe{})
 	DB = db
 }

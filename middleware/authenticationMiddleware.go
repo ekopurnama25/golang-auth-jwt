@@ -20,18 +20,13 @@ func IsUserAuthenticated(ctx *fiber.Ctx) error {
 	}
 
 	if tokenString == "" {
-		return ctx.JSON(fiber.Map{"status": "fail", "message": "You are not logged in"})
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "You are not logged in"})
 	}
-
-	// if tokenString != true {
-	// 	return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": 401, "message": "Yoor Token Expired"})
-	// }
 
 	Token, err := util.ParseToken(tokenString);
 	if err != nil {
-		return err
+		return fiber.ErrUnauthorized
 	}
-
 
 	var user models.Users 
 	database.DB.Where("id = ?",Token).First(&user)

@@ -7,5 +7,5 @@ import (
 )
 
 func SetupCoffeRoutes(app *fiber.App) {
-	app.Get("/api/users/", controllers.AllUsers)
+	app.Get("/api/coffe/", controllers.CoffeGetAll)
 }

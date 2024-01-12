@@ -62,8 +62,6 @@ func ParseRefreshToken(tokenString string) (string, error) {
 	if err != nil || !token.Valid {
 		return "", err
 	}
-
 	claims := token.Claims.(*jwt.StandardClaims) // Casting the token.Claims to the struct jwt.StandardClaims
-
 	return claims.Issuer, nil
 }
