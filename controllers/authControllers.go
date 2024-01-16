@@ -5,6 +5,7 @@ import (
 	"golang-auth-apiweb-coffee/models"
 	"golang-auth-apiweb-coffee/util"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -119,11 +120,16 @@ func PostRefreshToken(c *fiber.Ctx) error {
 }
 
 func GetUsersLogin(c *fiber.Ctx) error {
-	cookie := c.Cookies(util.CookieName)
+	cookie := c.Get("Authorization")
+	if strings.HasPrefix(cookie, "Bearer ") {
+		cookie = strings.TrimPrefix(cookie, "Bearer ")
+	}
 	userId, err := util.ParseToken(cookie)
 	if err != nil {
 		return err
 	}
+
+	
 	var users models.Users
 	err = database.DB.Preload("Role").First(&users, userId).Error
 	if err != nil {

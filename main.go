@@ -30,6 +30,8 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	
+
 	routes.Setup(app)
 	PORT:=goDotEnvVariable("APP_PORT")
 	app.Listen(PORT)
