@@ -31,6 +31,7 @@ type Coffe struct {
 	HargaCoffe string `gorm:"type:varchar(350);" form:"harga_coffe" binding:"required"`
 	ImagesCoffe string `gorm:"type:varchar(350);" form:"images_coffe" binding:"required"`
 	UrlImageCoffe string `gorm:"type:varchar(350);" form:"url_image_coffe" binding:"required"`
+	DescriptionCoffe string `gorm:"type:varchar(350);" form:"description_coffe" binding:"required"`
 }
 
 func (users *Users) SetPassword(password string) error {
