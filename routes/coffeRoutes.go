@@ -10,4 +10,7 @@ func SetupCoffeRoutes(app *fiber.App) {
 	app.Static("/utils/img_coffe", "./utils/img_coffe")
 	app.Get("/api/coffe/", controllers.CoffeGetAll)
 	app.Post("/api/coffe/", controllers.CoffePost)
+	app.Delete("/api/coffe/:id", controllers.DeleteCoffe)
+	app.Get("/api/coffe/:id", controllers.GetIdCoffe)
+	app.Put("/api/coffe/", controllers.UpdateDataCoffe)
 }

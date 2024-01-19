@@ -5,6 +5,7 @@ import (
 	"golang-auth-apiweb-coffee/database"
 	"golang-auth-apiweb-coffee/models"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -60,5 +61,56 @@ func CoffePost(c * fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Berhasil Menambah Data",
 		"data": data,
+	})
+}
+
+func DeleteCoffe(c * fiber.Ctx) error {
+	CoffeId, err := c.ParamsInt("id")
+	if err != nil {
+		return err
+	}
+	var coffe models.Coffe
+	cekid := database.DB.First(&coffe, CoffeId).Error
+	if cekid != nil {
+		return fiber.NewError(fiber.StatusNotFound)
+	}
+	directory := "./util/img_coffe/"
+	filename := directory + coffe.ImagesCoffe
+	os.Remove(filename)
+	result := database.DB.Delete(&coffe, CoffeId)
+	if result.Error != nil {
+		return err
+	}
+	return c.JSON(fiber.Map{
+		"message": "Berhasil menghapus data",
+		"status": 200,
+		"id": CoffeId,
+	});
+}
+
+func GetIdCoffe(c * fiber.Ctx) error {
+	CoffeId, err := c.ParamsInt("id")
+	if err != nil {
+		return err
+	}
+	var coffe models.Coffe
+	err = database.DB.First(&coffe, CoffeId).Error
+	if err != nil {
+		return fiber.NewError(fiber.StatusNotFound)
+	}
+	return c.JSON(fiber.Map{
+		"message": "Berhasil Menambah Data",
+		"data": coffe,
+	})
+}
+
+func UpdateDataCoffe(c *fiber.Ctx) error {
+	CoffeId, err := c.ParamsInt("id")
+	if err != nil {
+		return err
+	}
+	return c.JSON(fiber.Map{
+		"Update": CoffeId,
+		"status": "update masih dikerjakan",
 	})
 }
