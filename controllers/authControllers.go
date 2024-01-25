@@ -31,7 +31,7 @@ func AUthUsersMiddlaware(c *fiber.Ctx) error {
 		}else{
 			expirationTimeRefresh := time.Now().Add(24 * time.Hour)
 			expirationTime := time.Now().Add(30 * time.Second)
-			Token, err := util.CreateToken(strconv.Itoa(int(users.Id)), expirationTime)
+			Token, err := util.CreateToken(strconv.Itoa(int(users.IdRole)), expirationTime)
 			Refresh, err := util.CreateRefreshToken(strconv.Itoa(int(users.Id)), expirationTimeRefresh)
 			if err != nil {
 				return err
@@ -68,6 +68,7 @@ func AUthUsersMiddlaware(c *fiber.Ctx) error {
 				HTTPOnly: true,
 				SameSite: "lax",
 			})
+
 			return c.JSON(fiber.Map{
 				"AccessToken":Token,
 				"RefreshToken":Refresh,

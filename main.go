@@ -20,19 +20,17 @@ func goDotEnvVariable(key string) string {
 }
 
 func main() {
-
 	database.Connect()
 
     app := fiber.New()
-
+	app.Static("/", "./public")
 	// Add CORS Middleware so the frontend get the cookie
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
-
 	
-
 	routes.Setup(app)
+	
 	PORT:=goDotEnvVariable("APP_PORT")
 	app.Listen(PORT)
 }
