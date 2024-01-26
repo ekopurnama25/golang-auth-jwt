@@ -23,12 +23,12 @@ func main() {
 	database.Connect()
 
     app := fiber.New()
-	app.Static("/", "./public")
+	//app.Static("/", "./public")
 	// Add CORS Middleware so the frontend get the cookie
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
-	
+	app.Static("/", "./util/img_coffe")
 	routes.Setup(app)
 	
 	PORT:=goDotEnvVariable("APP_PORT")
