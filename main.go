@@ -28,7 +28,7 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
-	app.Static("/", "./util/img_coffe")
+	app.Static("/util", "./util")
 	routes.Setup(app)
 	
 	PORT:=goDotEnvVariable("APP_PORT")
