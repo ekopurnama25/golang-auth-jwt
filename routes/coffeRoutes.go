@@ -11,5 +11,5 @@ func SetupCoffeRoutes(app *fiber.App) {
 	app.Post("/api/coffe/", controllers.CoffePost)
 	app.Delete("/api/coffe/:id", controllers.DeleteCoffe)
 	app.Get("/api/coffe/:id", controllers.GetIdCoffe)
-	app.Put("/api/coffe/", controllers.UpdateDataCoffe)
+	app.Put("/api/coffe/:id", controllers.UpdateDataCoffe)
 }

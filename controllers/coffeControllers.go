@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"golang-auth-apiweb-coffee/database"
 	"golang-auth-apiweb-coffee/models"
@@ -109,8 +110,80 @@ func UpdateDataCoffe(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(fiber.Map{
-		"Update": CoffeId,
-		"status": "update masih dikerjakan",
-	})
+	file, err := c.FormFile("image")
+    if err != nil {
+        log.Println("image upload error --> ", err)
+        return c.JSON(fiber.Map{"status": 500, "message": "Server error", "data": nil})
+    }
+	CoffeTExt := struct {
+		JenisCoffe string `json:"jenis_coffe"`
+		HargaCoffe    string `json:"harga_coffe"`
+		DescriptionCoffe string `json:"description_coffe"`
+	}{}
+	if err := c.BodyParser(&CoffeTExt); err != nil {
+		return err
+	}
+	if err := c.BodyParser(&CoffeTExt); err != nil {
+		return err
+	}
+    uniqueId := uuid.New()
+    filename := strings.Replace(uniqueId.String(), "-", "", -1)
+    fileExt := strings.Split(file.Filename, ".")[1]
+    image := fmt.Sprintf("%s.%s", filename, fileExt)
+	if image  {
+		save = c.SaveFile(file, fmt.Sprintf("./util/img_coffe/%s", image))
+			if save != nil {
+				log.Println("image save error --> ", err)
+				return c.JSON(fiber.Map{"status": 500, "message": "Server error", "data": nil})
+			}else{
+				var coffe models.Coffe
+				err = database.DB.First(&coffe, CoffeId).Error
+				imageLama := coffe.ImagesCoffe;
+				url := "./util/img_coffe/"
+				e := os.Remove(url + imageLama)
+				if e != nil { 
+					log.Fatal(e) 
+				}  
+			}
+
+			imageUrl := fmt.Sprintf("http://localhost:5000/util/img_coffe/%s", image)
+
+			data := models.Coffe { 
+				JenisCoffe : CoffeTExt.JenisCoffe,
+				HargaCoffe :  CoffeTExt.HargaCoffe,
+				ImagesCoffe: image,
+				UrlImageCoffe: imageUrl,
+				DescriptionCoffe : CoffeTExt.DescriptionCoffe,
+			}
+
+			var coffe models.Coffe
+			coffe.Id = uint(CoffeId)
+			result := database.DB.Model(&coffe).Updates(data)
+			if result.Error != nil {
+				return err
+			}
+			
+		return c.JSON(fiber.Map{
+			"Update": CoffeId,
+			"status": data,
+		})
+	}else{
+		data := models.Coffe { 
+			JenisCoffe : CoffeTExt.JenisCoffe,
+			HargaCoffe :  CoffeTExt.HargaCoffe,
+			DescriptionCoffe : CoffeTExt.DescriptionCoffe,
+    	}
+
+		var coffe models.Coffe
+		coffe.Id = uint(CoffeId)
+		result := database.DB.Model(&coffe).Updates(data)
+		if result.Error != nil {
+			return err
+		}
+		
+		return c.JSON(fiber.Map{
+			"Update": CoffeId,
+			"status": data,
+		})
+	}
 }
