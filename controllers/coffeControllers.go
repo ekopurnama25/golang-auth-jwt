@@ -133,11 +133,11 @@ func UpdateDataCoffe(c *fiber.Ctx) error {
 			}
 			
 			return c.JSON(fiber.Map{
-				"Update": CoffeId,
-				"status": data,
+				"message": "Berhasil Mengubah Data",
+				"data": data,
 			})
     	}
-		
+
 	CoffeTExt := struct {
 		JenisCoffe string `json:"jenis_coffe"`
 		HargaCoffe    string `json:"harga_coffe"`
@@ -184,7 +184,7 @@ func UpdateDataCoffe(c *fiber.Ctx) error {
 	}
 	
 	return c.JSON(fiber.Map{
-		"Update": CoffeId,
-		"status": data,
+		"message": "Berhasil Mengubah Data",
+		"data": data,
 	})
 }

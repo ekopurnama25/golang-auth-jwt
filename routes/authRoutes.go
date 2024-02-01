@@ -14,4 +14,5 @@ func SetupPublicAuthRoutes(app *fiber.App) {
 
 func SetupAuthRoutes(app *fiber.App) {
 	app.Get("/api/home/", controllers.GetUsersLogin)
+	app.Get("/api/logout/", controllers.GetUsersLogin)
 }

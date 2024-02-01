@@ -138,3 +138,7 @@ func GetUsersLogin(c *fiber.Ctx) error {
 	}
 	return c.JSON(users)
 }
+
+func LogoutAuth(c *fiber.Ctx) error {
+	
+}
