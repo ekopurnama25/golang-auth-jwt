@@ -141,10 +141,15 @@ func GetUsersLogin(c *fiber.Ctx) error {
 
 func LogoutAuth(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
-	Name:    "jwt",
-	Value:   "",
-	Expires: time.Now().Add(-time.Hour),
+		Name:     util.CookieName,
+		Value:    "",
+		Path:     "",
+		Domain:   "",
+		MaxAge:   0,
+		Expires:  time.Now().Add(-(2 * time.Hour)), // Set expiry date to the past
+		Secure:   false,
+		HTTPOnly: true,
+		SameSite: "lax",
 	})
-
-	return c.JSON(fiber.Map{"message":"Berhasil Logut"})
+	return c.JSON(fiber.Map{"message":"Berhasil Logout"})
 }
